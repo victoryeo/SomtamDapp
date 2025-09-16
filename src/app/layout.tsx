@@ -1,10 +1,10 @@
-import "./globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { AssetProvider } from "@/lib/providers/AssetContext";
 import Providers from "./providers";
+import "../css/globals.css";
 
 export const metadata: Metadata = {
   title: "Somtam Dapp",

@@ -1,11 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react'
-import "../../app/tabs.css"
 import { FieldMint } from './fieldMint';
 import { FieldRedeem } from './fieldRedeem';
 import { FieldDashboard } from './fieldDashboard';
 import { FieldFaucet } from './fieldFaucet';
+import "../../css/tabs.css"
 
 export const NavbarTabs = () => {
   const [toggleTabs, setToggleTabs] = useState(1)

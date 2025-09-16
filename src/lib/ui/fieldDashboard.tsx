@@ -9,7 +9,7 @@ import { useWalletClient } from "wagmi";
 import { utils } from "ethers";
 import { erc20Abi } from '@/config/abi/erc20Abi';
 import { signPermit } from '../permit/permit';
-import "../../app/swap.css"
+import "../../css/swap.css"
 import { somtamContractAddr } from '@/config/contractAddress';
 
 export const FieldDashboard = () => {
