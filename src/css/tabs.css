@@ -31,7 +31,8 @@
 }
 .active-tabs {
   background-image: linear-gradient(to top right, #c3393f #6093c2);
-  color: white;
+  color: darkred;
+  font-weight: bold;
 }
 .content-tabs {
   height: 400px;
