@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { ConnectBtn } from "./components/connectButton";
 import Profile from "./components/profile";
-import { Navbar } from "@/lib/ui/navbar";
+import { NavbarTabs } from "@/lib/ui/navbarTabs";
 import { FieldDashboard } from "@/lib/ui/fieldDashboard";
 
 export default function Home() {
@@ -12,8 +12,7 @@ export default function Home() {
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         <ConnectBtn />
       </div>
-      <Navbar/>
-      <FieldDashboard />
+      <NavbarTabs />
       <Profile />
     </main>
   );
