@@ -35,7 +35,7 @@ export const config = getDefaultConfig({
     [baseSepolia.id]: http(),
     [anvil.id]: http(),
     [unichain_sepolia.id]: http(
-      "https://unichain-sepolia.api.onfinality.io/public"
+      `https://unichain-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`
     ),
   },
 });
