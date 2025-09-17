@@ -267,10 +267,10 @@ export const FieldRedeem = () => {
             index = i;
       }
       // SOMTAM decimal point is 18
-      //const tempNum = parseFloat((+redeemAmount/10**(18 - tokenList[index].decimal)).toFixed(18)).toString()
+      const tempNum = parseFloat((+redeemAmount/10**(18 - tokenList[index].decimal)).toFixed(18)).toString()
       
       // SOMTAM decimal point is 6
-      const tempNum = parseFloat((+redeemAmount/10**(6 - tokenList[index].decimal)).toFixed(18)).toString()
+      //const tempNum = parseFloat((+redeemAmount/10**(6 - tokenList[index].decimal)).toFixed(18)).toString()
       setOutputAmount(tempNum)
     }
   }, [redeemAmount])

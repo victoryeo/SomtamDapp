@@ -214,10 +214,10 @@ export const FieldMint = () => {
             index = i;
       }
       // SOMTAM decimal point is 18
-      //setOutputAmount((+mintAmount*10**(18 - tokenList[index].decimal)).toString())
+      setOutputAmount((+mintAmount*10**(18 - tokenList[index].decimal)).toString())
 
       // SOMTAM decimal point is 6
-      setOutputAmount((+mintAmount*10**(6 - tokenList[index].decimal)).toString())      
+      // setOutputAmount((+mintAmount*10**(6 - tokenList[index].decimal)).toString())      
     }
   }, [mintAmount])
 
