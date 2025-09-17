@@ -32,7 +32,7 @@ export const tokenList = [
   {
     "index": 4,
     "name": "MockToken",
-    "address": process.env.NEXT_PUBLIC_COLLATERAL_ADDR,
+    "address": process.env.NEXT_PUBLIC_MOCKTOKEN_ADDR,
     "decimal": 18
   },  
 ]
