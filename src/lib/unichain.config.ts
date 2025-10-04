@@ -6,7 +6,9 @@ export const unichain_sepolia = defineChain({
   nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
   rpcUrls: {
     default: {
-      http: [`https://unichain-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`]
+      http: [
+        `https://cosmological-floral-sailboat.unichain-sepolia.quiknode.pro/${process.env.NEXT_PUBLIC_QUICKNODE_KEY}/`,
+      ],
     },
   },
   blockExplorers: {

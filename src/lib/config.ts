@@ -35,7 +35,7 @@ export const config = getDefaultConfig({
     [baseSepolia.id]: http(),
     [anvil.id]: http(),
     [unichain_sepolia.id]: http(
-      `https://unichain-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`
+      `https://cosmological-floral-sailboat.unichain-sepolia.quiknode.pro/${process.env.NEXT_PUBLIC_QUICKNODE_KEY}/`
     ),
   },
 });
