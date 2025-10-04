@@ -15,9 +15,9 @@ interface InterfaceContractAddresses {
 export const somtamContractAddr: InterfaceContractAddresses[] = [
   {
     ChainId: 1301, //unichain
-    MockToken: "0x6E511b239Fb69A420796fAd0FA51Cf9E95432d34",
-    Somtam: "0xbf7B5eEe6AFCef9DaED934886351A87D3C4032c7",
-    SomtamOperation: "0xbCaC9A23DFFB13CDccf484937Daa5aC9b6914f72",
+    MockToken: "0xE2D5640Be6617778f03b8F7A246d1096e0aeC563",
+    Somtam: "0x7CA3F4AD164c9423aF4c32cce4E2c2d69d17112F",
+    SomtamOperation: "0xc63cD3C58f00E1382fC4178187c75C578877aEFF",
     USDC: "0x31d0220469e10c4E71834a79b1f276d740d3768F",
     USDT: "",
     PYUSD: "",
