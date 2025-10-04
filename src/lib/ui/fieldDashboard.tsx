@@ -11,6 +11,7 @@ import { erc20Abi } from '@/config/abi/erc20Abi';
 import { signPermit } from '../permit/permit';
 import "../../css/swap.css"
 import { somtamContractAddr } from '@/config/contractAddress';
+import { useTransactionCount } from 'wagmi'
 
 export const FieldDashboard = () => {
   const [somtamBalance, setSomtamBalance] = useState('0');
@@ -21,6 +22,10 @@ export const FieldDashboard = () => {
   const [SOMTAMOPERATION_ADDR, setSOMTAMOPERATION_ADDR] = useState('0')
   const [USDC_ADDR, setUSDC_ADDR] = useState('0')
   const [COLLATERAL_ADDR, setCOLLATERAL_ADDR] = useState('0')
+  const { data: transactionCount, isLoading } = useTransactionCount({
+    address: myaddress,
+    // blockTag: 'latest' // or 'pending', 'earliest', 'safe', 'finalized'
+  })
 
   const handleGrant = async (e: any) => {
     e.preventDefault() // prevents page reload
@@ -62,6 +67,8 @@ export const FieldDashboard = () => {
     const somtamOperAddr = SOMTAMOPERATION_ADDR
     const colAddr = COLLATERAL_ADDR
 
+    console.log("handlePermit", somtamAddr, colAddr, myaddress)
+    try {
     //  Mock Token
     let mtNonce = await readContract(config, {
       address: colAddr as Address,
@@ -76,11 +83,18 @@ export const FieldDashboard = () => {
       args: []
     });
 
-
-
     let mtVersion = "1"; 
     const mtDeadline = BigInt(Math.floor(Date.now() / 1000) + 200_000)
-    console.log(mtNonce, mtName, mtVersion, mtDeadline)
+    console.log(mtNonce, mtName, chain?.id, mtVersion, mtDeadline)
+    console.log(transactionCount, somtamOperAddr, myaddress, colAddr)
+
+    // Verify the token actually supports permit
+    const supportsPermit = await readContract(config, {
+      address: colAddr as Address,
+      abi: [{"type":"function","name":"DOMAIN_SEPARATOR","inputs":[],"outputs":[{"name":"","type":"bytes32"}],"stateMutability":"view"}],
+      functionName: "DOMAIN_SEPARATOR",
+    });
+    console.log("Supports EIP-2612:", !!supportsPermit);
 
     const mtSignature1 = await signPermit({
         contractAddress: colAddr as Address,
@@ -231,6 +245,9 @@ export const FieldDashboard = () => {
       args: [myaddress, somtamOperAddr],
     });
     console.log(valueAllowance3)
+    } catch (e) {
+      console.warn(e)
+    }
   }
 
   useEffect(()=> {
