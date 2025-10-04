@@ -59,6 +59,13 @@ export const FieldDashboard = () => {
       functionName: "grantRole",
       args: [redeemerRole, somtamOperAddr],
     });
+    
+    writeContract({
+      address: somtamAddr as Address,
+      abi: somtamAbi,
+      functionName: "grantRole",
+      args: [minterRole, somtamOperAddr],
+    });
   }
 
   const handlePermit = async (e: any) => {
@@ -313,6 +320,10 @@ export const FieldDashboard = () => {
           </div>                     
           <button type="submit" className="swapButton" onClick={handlePermit}>
             ERC20 Permit
+          </button>
+          <p className="swapHeader"></p>
+          <button type="submit" className="swapButton" onClick={handleGrant}>
+            Grant Role
           </button>
           {error && (
             <div>Error: {(error as BaseError).shortMessage || error.message}</div>
