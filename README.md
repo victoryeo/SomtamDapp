@@ -1,4 +1,4 @@
-This is a user dapp to mint/redeem SomtamCoin.
+This is a Somtam dapp to mint/redeem SomtamCoin.
 
 ## Getting Started
 
