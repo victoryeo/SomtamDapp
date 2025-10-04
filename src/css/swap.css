@@ -84,6 +84,8 @@
   background-color: #dd2f81;
   cursor: pointer;
   text-align: center;
+  margin-top: 1;
+  margin-bottom: 1;
 }
 .chainSpace {
   color: #000;
