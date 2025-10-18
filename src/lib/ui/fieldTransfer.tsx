@@ -7,7 +7,6 @@ import { useReadContract, useWriteContract, useAccount } from 'wagmi';
 import { FieldCurrency } from './fieldCurrency'
 import { erc20Abi } from '@/config/abi/erc20Abi';
 import { config } from '../config';
-import { Options } from '@layerzerolabs/lz-v2-utilities';
 import { Hex, hexToNumber, pad, slice, toHex, TypedDataDomain } from "viem";
 import { parseGwei } from 'viem'
 
@@ -49,15 +48,12 @@ export const FieldTransfer = () => {
     const bytes32DestAddr ='0x'.concat(destinationAddress.slice(2).padStart(64, '0'))
     console.log(bytes32DestAddr, BigInt(parseInt(swapAmount, 10)))
 
-    const _options = Options.newOptions().addExecutorLzReceiveOption(200000, 0);
-    console.log(_options.toHex(), swapAmount)
-
     const sendParam: SendParam = {
       dstEid: 2,
       to: bytes32DestAddr as `0x${string}`,
       amountLD: BigInt(swapAmount),
       minAmountLD: BigInt(swapAmount),
-      extraOptions: _options.toHex() as `0x${string}`,
+      extraOptions: `0x1`,  // TBC: dummy value for now
       composeMsg: "" as `0x${string}`,
       oftCmd: "" as `0x${string}`
     }
