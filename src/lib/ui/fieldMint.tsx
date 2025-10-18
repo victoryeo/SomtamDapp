@@ -287,6 +287,7 @@ export const FieldMint = () => {
     const somtamOperAddr = SOMTAMOPERATION_ADDR
     const somtamReserveAddr = SOMTAMRESERVE_ADDR
 
+    console.log("handleMint", SOMTAMOPERATION_ADDR)
     if (Number(amountInEther) % 1 != 0) {
       // is decimal
       alert("Please enter integer for mint amount \nbecause unit is in wei")
