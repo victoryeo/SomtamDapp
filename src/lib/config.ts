@@ -9,12 +9,12 @@ import { unichain_sepolia } from "./unichain.config";
 const projectId = process.env.NEXT_PUBLIC_PROJECT_ID!;
 console.log("projectId:", projectId);
 const supportedChains: Chain[] = [
-  sepolia,
-  bscTestnet,
-  blastSepolia,
-  anvil,
+  //sepolia,
+  //bscTestnet,
+  //blastSepolia,
+  //anvil,
   unichain_sepolia,
-  baseSepolia,
+  //baseSepolia,
 ];
 console.log(`http://${process.env.NEXT_PUBLIC_ANVIL_IP}:8545`);
 
@@ -29,11 +29,11 @@ export const config = getDefaultConfig({
   syncConnectedChain: true,
   //transports: supportedChains.reduce((obj, chain) => ({ ...obj, [chain.id]: http() }), {})
   transports: {
-    [sepolia.id]: http(),
-    [bscTestnet.id]: http(),
-    [blastSepolia.id]: http(),
-    [baseSepolia.id]: http(),
-    [anvil.id]: http(),
+    //[sepolia.id]: http(),
+    //[bscTestnet.id]: http(),
+    //[blastSepolia.id]: http(),
+    //[baseSepolia.id]: http(),
+    //[anvil.id]: http(),
     [unichain_sepolia.id]: http(
       `https://cosmological-floral-sailboat.unichain-sepolia.quiknode.pro/${process.env.NEXT_PUBLIC_QUICKNODE_KEY}/`
     ),
