@@ -1,18 +1,5 @@
-import { FieldFaucet } from "@/lib/ui/fieldFaucet";
-import { ConnectBtn } from "../components/connectButton";
-import Profile from "../components/profile";
-import { Navbar } from "@/lib/ui/navbar";
+import { redirect } from "next/navigation";
 
 export default function Page() {
-
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <ConnectBtn />
-      </div>
-      <Navbar/>
-      <FieldFaucet/>
-      <Profile />
-    </main>
-  );
+  redirect("/?tab=faucet");
 }

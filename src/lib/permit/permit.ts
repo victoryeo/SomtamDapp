@@ -1,5 +1,5 @@
 import { Hex, hexToNumber, pad, slice, toHex, TypedDataDomain } from "viem";
-import { signTypedData, verifyTypedData, getChainId } from "@wagmi/core";
+import { signTypedData, verifyTypedData, getChainId } from "wagmi/actions";
 import { config } from "../config";
 
 export type PermitSignature = {

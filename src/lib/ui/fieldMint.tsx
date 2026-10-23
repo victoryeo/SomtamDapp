@@ -3,15 +3,19 @@
 import React, { useState, useEffect } from 'react'
 import { useReadContract, useWriteContract, useAccount } from 'wagmi';
 import { Address, parseEther, formatEther } from "viem";
-import { readContract } from '@wagmi/core'
-import { FieldCurrency } from './fieldCurrency'
+import { readContract } from 'wagmi/actions'
+import { AmountBox, FieldCurrency } from './fieldCurrency'
 import { config } from '../config'
 import { erc20Abi } from '@/config/abi/erc20Abi';
 import { type BaseError, useWaitForTransactionReceipt } from "wagmi";
-import { TokenDialog } from '@/app/components/tokenDialog'
 import { tokenList } from '@/config/tokenList';
 import { useAssetContext } from '../providers/AssetContext';
 import { somtamContractAddr } from '@/config/contractAddress';
+import { TokenSelect } from '@/components/token-select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle, Coins, Loader2, PlusCircle } from 'lucide-react';
 
 type OrderType = {
   order_type: number,
@@ -29,7 +33,6 @@ export const FieldMint = () => {
   const [mintAmount, setMintAmount] = useState("0");
   const [outputAmount, setOutputAmount] = useState("0");
   const [tokenBalance, setTokenBalance] = useState('0');
-  const [showModal, setShowModal] = useState<boolean>(false)
   const { assetName, updateAssetName } = useAssetContext();
   const [tokenName, setTokenName] = useState<string>(assetName);
   const [somtamBalance, setSomtamBalance] = useState('0');
@@ -99,20 +102,6 @@ export const FieldMint = () => {
       console.log(e)
     }
   }, [isConfirmed])
-
-  useEffect(()=> {
-    if (showModal == false) {
-      //setMintAmount("0")
-      //setOutputAmount("0")
-      let index = 0
-      for (var i = 0, j = tokenList.length; i < j; i++) {
-        if (tokenList[i].name === tokenName)
-            index = i;
-      }
-      // SOMTAM decimal point is 18
-      setOutputAmount((+mintAmount*10**(18 - tokenList[index].decimal)).toString())
-    }
-  }, [showModal])
 
   useEffect(()=> {
     const getChain = () => {
@@ -219,7 +208,7 @@ export const FieldMint = () => {
       // SOMTAM decimal point is 6
       // setOutputAmount((+mintAmount*10**(6 - tokenList[index].decimal)).toString())      
     }
-  }, [mintAmount])
+  }, [mintAmount, tokenName])
 
   useEffect(()=> {
 
@@ -378,46 +367,62 @@ export const FieldMint = () => {
   }
 
   return (
-    <div className="appBody">
-      <div className="swapContainer">
-        <div className="swapHeader">
-          <span className="swapText">Mint</span>
-          &nbsp;
-          <button className="narrowButton rightAlignContainer" onClick={() => setShowModal(true)}>
-            Select Collateral
-          </button>          
-        </div>
-        {showModal && (
-          <TokenDialog isOpen={() => setShowModal(true)} onClose={() => setShowModal(false)} tokenName={tokenName}
-          setTokenName={setTokenName} />
-        )}
-        <div className="">
-          <FieldCurrency
-            field="input"
-            tokenName={tokenName}
-            balance={tokenBalance}
-            onAmount={setMintAmount} />
-          <div className="row currencyInput">
-            <div className="col-md-6 currencyInputField">
-              {outputAmount}&nbsp;wei
-            </div>
-            <div className="col-md-6 tokenContainer">
-              <span className="tokenName">SOMTAM</span>
-              <div className="balanceContainer">
-                <span className="balanceAmount">Balance: {somtamBalance} wei</span>
-              </div>              
-            </div>
+    <Card className="glass-card mx-auto w-full max-w-xl">
+      <CardHeader className="pb-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <PlusCircle className="h-5 w-5 text-primary" />
+              Mint SOMTAM
+            </CardTitle>
+            <CardDescription>
+              Deposit collateral to mint SOMTAM into your wallet.
+            </CardDescription>
           </div>
+          <TokenSelect
+            value={tokenName}
+            onValueChange={setTokenName}
+            options={tokenList.map((token) => token.name)}
+            ariaLabel="Select collateral"
+          />
         </div>
-        <div className="swapButtonContainer">
-          <button type="submit" className="swapButton" onClick={handleMint}>
-            Mint 
-          </button>
-          {error && (
-            <div>Error: {(error as BaseError).shortMessage || error.message}</div>
-          )}                    
-        </div>
-      </div>
-    </div>
-  )    
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <FieldCurrency
+          field="input"
+          tokenName={tokenName}
+          balance={`${tokenBalance} wei`}
+          onAmount={setMintAmount}
+        />
+        <AmountBox
+          label="You receive"
+          amount={outputAmount}
+          tokenName="SOMTAM"
+          balance={`${somtamBalance} wei`}
+          readOnly
+        />
+        <Button
+          className="w-full gap-2"
+          onClick={handleMint}
+          disabled={isPending || isConfirming}
+        >
+          {isPending || isConfirming ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Coins className="h-4 w-4" />
+          )}
+          {isConfirming ? "Confirming..." : "Mint"}
+        </Button>
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Mint failed</AlertTitle>
+            <AlertDescription>
+              {(error as BaseError).shortMessage || error.message}
+            </AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
+    </Card>
+  )
 }
