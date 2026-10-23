@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { readContract, writeContract as writeContractDirect} from '@wagmi/core'
+import { readContract, writeContract as writeContractDirect} from 'wagmi/actions'
 import { config } from '../config'
 import { somtamAbi } from '@/config/abi/somtamAbi';
 import { somtamOperationAbi } from '@/config/abi/somtamOperationAbi';

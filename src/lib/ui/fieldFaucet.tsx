@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useReadContract, useWriteContract, useAccount } from 'wagmi';
 import { Address, parseEther, formatEther } from "viem";
-import { readContract } from '@wagmi/core'
+import { readContract } from 'wagmi/actions'
 import { FieldCurrency } from './fieldCurrency'
 import { config } from '../config'
 import { erc20Abi } from '@/config/abi/erc20Abi';

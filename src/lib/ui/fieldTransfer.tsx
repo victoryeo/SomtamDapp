@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Address } from "viem";
-import { readContract, writeContract } from '@wagmi/core'
+import { readContract, writeContract } from 'wagmi/actions'
 import { useAccount } from 'wagmi';
 import { FieldCurrency } from './fieldCurrency'
 import { erc20Abi } from '@/config/abi/erc20Abi';

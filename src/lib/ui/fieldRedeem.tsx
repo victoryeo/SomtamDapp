@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react'
 import { useWriteContract, useAccount, useWatchContractEvent } from 'wagmi';
-import { Address, parseEther, formatEther } from "viem";
-import { readContract, writeContract as writeContractDirect, watchContractEvent, getTransactionReceipt } from '@wagmi/core'
+
+import { readContract, writeContract as writeContractDirect, watchContractEvent, getTransactionReceipt } from 'wagmi/actions'
 import { type BaseError, useWaitForTransactionReceipt } from "wagmi";
 import { AmountBox, FieldCurrency } from './fieldCurrency'
 import { config } from '../config'
