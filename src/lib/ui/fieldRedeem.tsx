@@ -13,6 +13,7 @@ import { tokenList } from '@/config/tokenList';
 import { useAssetContext } from '../providers/AssetContext';
 import { somtamContractAddr } from '@/config/contractAddress';
 import  * as ethers from 'ethers';
+import { Address } from "viem";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
