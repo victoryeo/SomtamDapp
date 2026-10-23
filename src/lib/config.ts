@@ -34,8 +34,6 @@ export const config = getDefaultConfig({
     //[blastSepolia.id]: http(),
     //[baseSepolia.id]: http(),
     //[anvil.id]: http(),
-    [unichain_sepolia.id]: http(
-      `https://cosmological-floral-sailboat.unichain-sepolia.quiknode.pro/${process.env.NEXT_PUBLIC_QUICKNODE_KEY}/`
-    ),
+    [unichain_sepolia.id]: http("https://sepolia.unichain.org"),
   },
 });
