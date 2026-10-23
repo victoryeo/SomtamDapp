@@ -1,14 +1,17 @@
 'use client';
 
 import React, { useState, useEffect } from 'react'
-import { Address, parseEther, formatEther } from "viem";
+import { Address } from "viem";
 import { readContract, writeContract } from '@wagmi/core'
-import { useReadContract, useWriteContract, useAccount } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { FieldCurrency } from './fieldCurrency'
 import { erc20Abi } from '@/config/abi/erc20Abi';
 import { config } from '../config';
-import { Hex, hexToNumber, pad, slice, toHex, TypedDataDomain } from "viem";
-import { parseGwei } from 'viem'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Send } from 'lucide-react';
 
 type SendParam = {
   dstEid: number,
@@ -136,41 +139,40 @@ export const FieldTransfer = () => {
   }, [])
 
   return (
-    <div className="appBody">
-      <div className="swapContainer">
-        <div className="swapHeader">
-          <span className="swapText">Transfer</span>
+    <Card className="glass-card mx-auto w-full max-w-xl">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Send className="h-5 w-5 text-primary" />
+          Transfer SOMTAM
+        </CardTitle>
+        <CardDescription>
+          Send SOMTAM cross-chain to another address.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="destination-address" className="text-xs text-muted-foreground">
+            Destination address
+          </Label>
+          <Input
+            id="destination-address"
+            className="h-10 rounded-xl border-white/10 bg-black/20 font-mono text-sm"
+            placeholder="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+            value={destinationAddress}
+            onChange={(e) => setDestinationAddress(e.target.value)}
+          />
         </div>
-        <div className="chainSpace">   
-          <div className="row currencyInput">
-            <div className="col-md-6 currencyInputField">
-              Destination Address
-            </div>              
-            <div className="col-md-6 tokenContainer">
-              <span className="tokenName">
-              <input
-                className="amountInputField"
-                placeholder="0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
-                value={destinationAddress}
-                onChange={(e)=>setDestinationAddress(e.target.value)}
-              />
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="">
-          <FieldCurrency
-            field="input"
-            tokenName="SOMTAM"
-            balance={somtamBalance}
-            onAmount={setSwapAmount} />
-        </div>
-        <div className="swapButtonContainer">
-          <button type="submit" className="swapButton" onClick={handleSend}>
-            Send 
-          </button>               
-        </div>
-      </div>
-    </div>
+        <FieldCurrency
+          field="input"
+          tokenName="SOMTAM"
+          balance={`${somtamBalance} wei`}
+          onAmount={setSwapAmount}
+        />
+        <Button className="w-full gap-2" onClick={handleSend}>
+          <Send className="h-4 w-4" />
+          Send
+        </Button>
+      </CardContent>
+    </Card>
   )
 }

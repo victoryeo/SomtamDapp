@@ -5,15 +5,18 @@ import { useWriteContract, useAccount, useWatchContractEvent } from 'wagmi';
 import { Address, parseEther, formatEther } from "viem";
 import { readContract, writeContract as writeContractDirect, watchContractEvent, getTransactionReceipt } from '@wagmi/core'
 import { type BaseError, useWaitForTransactionReceipt } from "wagmi";
-import { FieldCurrency } from './fieldCurrency'
+import { AmountBox, FieldCurrency } from './fieldCurrency'
 import { config } from '../config'
 import { erc20Abi } from '@/config/abi/erc20Abi';
 import { somtamOperationAbi } from '@/config/abi/somtamOperationAbi';
-import { TokenDialog } from '@/app/components/tokenDialog'
 import { tokenList } from '@/config/tokenList';
 import { useAssetContext } from '../providers/AssetContext';
 import { somtamContractAddr } from '@/config/contractAddress';
 import  * as ethers from 'ethers';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle, CheckCircle2, Loader2, RefreshCcw } from 'lucide-react';
 
 type OrderType = {
   order_type: number,
@@ -32,7 +35,6 @@ export const FieldRedeem = () => {
   const [outputAmount, setOutputAmount] = useState("0");
   const [usdcBalance, setUsdcBalance] = useState('0');
   const [somtamBalance, setSomtamBalance] = useState('0');
-  const [showModal, setShowModal] = useState<boolean>(false)
   const { assetName, updateAssetName } = useAssetContext();
   const [tokenName, setTokenName] = useState(assetName);
   const [tokenBalance, setTokenBalance] = useState('0');
@@ -154,18 +156,6 @@ export const FieldRedeem = () => {
   }, [isConfirmed])
 
   useEffect(()=> {
-    if (showModal == false) {
-      let index = 0
-      for (var i = 0, j = tokenList.length; i < j; i++) {
-        if (tokenList[i].name === tokenName)
-            index = i;
-      }
-      // SOMTAM decimal point is 18
-      setOutputAmount((+redeemAmount/10**(18 - tokenList[index].decimal)).toFixed(18))
-    }
-  }, [showModal])
-
-  useEffect(()=> {
     const getChain = () => {
       for (const chains of somtamContractAddr){
         if (chain?.id != undefined) {
@@ -273,7 +263,7 @@ export const FieldRedeem = () => {
       //const tempNum = parseFloat((+redeemAmount/10**(6 - tokenList[index].decimal)).toFixed(18)).toString()
       setOutputAmount(tempNum)
     }
-  }, [redeemAmount])
+  }, [redeemAmount, tokenName])
 
   useEffect(()=> {
 
@@ -455,45 +445,59 @@ export const FieldRedeem = () => {
   }
 
   return (
-    <div className="appBody">
-      <div className="swapContainer">
-        <div className="swapHeader">
-          <span className="swapText">Redeem</span>  
-          &nbsp;
-          
-        </div>
-                       
-        <div className="">
-          <FieldCurrency
-            field="input"
-            tokenName="SOMTAM"
-            balance={somtamBalance}
-            onAmount={setRedeemAmount} />
-          <div className="row currencyInput">
-            <div className="col-md-6 currencyInputField">
-              {outputAmount}&nbsp;wei
-            </div>
-            <div className="col-md-6 tokenContainer">
-              <span className="tokenName">{tokenName}</span>
-              <div className="balanceContainer">
-                <span className="balanceAmount">Balance: {tokenBalance} wei</span>
-              </div>              
-            </div>
-          </div>
-        </div>
-        <div className="swapButtonContainer">
-          <button type="submit" className="swapButton" onClick={handleRedeem}>
-            Redeem 
-          </button>
+    <Card className="glass-card mx-auto w-full max-w-xl">
+      <CardHeader className="pb-4">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <RefreshCcw className="h-5 w-5 text-primary" />
+          Redeem SOMTAM
+        </CardTitle>
+        <CardDescription>
+          Burn SOMTAM to receive {tokenName} back from the reserve.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <FieldCurrency
+          field="input"
+          tokenName="SOMTAM"
+          balance={`${somtamBalance} wei`}
+          onAmount={setRedeemAmount}
+        />
+        <AmountBox
+          label="You receive"
+          amount={outputAmount}
+          tokenName={tokenName}
+          balance={`${tokenBalance} wei`}
+          readOnly
+        />
+        <Button
+          className="w-full gap-2"
+          onClick={handleRedeem}
+          disabled={isPending || isConfirming}
+        >
+          {isPending || isConfirming ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCcw className="h-4 w-4" />
+          )}
+          {isConfirming ? "Confirming..." : "Redeem"}
+        </Button>
 
-          {redeemMsg && (
-            <div>{redeemMsg}</div>
-          )}
-          {error && (
-            <div>Error: { error && handleError(error)}</div>
-          )}
-        </div>
-      </div>
-    </div>
-  )    
+        {redeemMsg && (
+          <Alert className="border-primary/30 bg-primary/10 text-primary">
+            <CheckCircle2 className="h-4 w-4" />
+            <AlertTitle>Redeem complete</AlertTitle>
+            <AlertDescription>{redeemMsg}</AlertDescription>
+          </Alert>
+        )}
+
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Redeem failed</AlertTitle>
+            <AlertDescription>{handleError(error)}</AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
+    </Card>
+  )
 }

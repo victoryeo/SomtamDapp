@@ -8,10 +8,14 @@ import { FieldCurrency } from './fieldCurrency'
 import { config } from '../config'
 import { erc20Abi } from '@/config/abi/erc20Abi';
 import { wethAbi } from '@/config/abi/wethAbi';
-import { FaucetDialog } from '@/app/components/faucetDialog';
 import { faucetList } from '@/config/faucetList';
 import { type BaseError, useWaitForTransactionReceipt } from "wagmi";
 import { somtamContractAddr } from '@/config/contractAddress';
+import { TokenSelect } from '@/components/token-select';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { AlertCircle, Droplets, Loader2 } from 'lucide-react';
 
 export const FieldFaucet = () => {
   const { address: myaddress, chain } = useAccount();
@@ -20,7 +24,6 @@ export const FieldFaucet = () => {
   const [mintAmount, setMintAmount] = useState("0");
   const [outputAmount, setOutputAmount] = useState("0");
   const [tokenBalance, setTokenBalance] = useState('0');
-  const [showModal, setShowModal] = useState<boolean>(false);
   const [tokenName, setTokenName] = useState("WETH");
 
   useEffect(()=> {
@@ -184,46 +187,55 @@ export const FieldFaucet = () => {
   }
 
   return (
-    <div className="appBody">
-      <div className="swapContainer">
-        <div className="swapHeader">
-          <span className="swapText">Faucet</span>
-          <button
-            className="narrowButton rightAlignContainer"
-            onClick={() => setShowModal(true)}
-          >
-            Select Token
-          </button>
-        </div>
-
-        {showModal && (
-          <FaucetDialog
-            isOpen={() => setShowModal(true)}
-            onClose={() => setShowModal(false)}
-            tokenName={tokenName}
-            setTokenName={setTokenName}
-          />
-        )}
-
-        <div className="">
-          <FieldCurrency
-            field="input"
-            tokenName={tokenName}
-            balance={tokenBalance}
-            onAmount={setMintAmount}
+    <Card className="glass-card mx-auto w-full max-w-xl">
+      <CardHeader className="pb-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Droplets className="h-5 w-5 text-primary" />
+              Faucet
+            </CardTitle>
+            <CardDescription>
+              Request test tokens for this network.
+            </CardDescription>
+          </div>
+          <TokenSelect
+            value={tokenName}
+            onValueChange={setTokenName}
+            options={faucetList.map((token) => token.name)}
+            ariaLabel="Select faucet token"
           />
         </div>
-
-        <div className="swapButtonContainer">
-          <button type="submit" className="swapButton" onClick={handleMintFaucet}>
-            Get Tokens
-          </button>
-
-          {error && (
-            <div>Error: {(error as BaseError).shortMessage || error.message}</div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <FieldCurrency
+          field="input"
+          tokenName={tokenName}
+          balance={`${tokenBalance} wei`}
+          onAmount={setMintAmount}
+        />
+        <Button
+          className="w-full gap-2"
+          onClick={handleMintFaucet}
+          disabled={isPending || isConfirming}
+        >
+          {isPending || isConfirming ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Droplets className="h-4 w-4" />
           )}
-        </div>
-      </div>
-    </div>
+          {isConfirming ? "Confirming..." : "Get Tokens"}
+        </Button>
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Faucet request failed</AlertTitle>
+            <AlertDescription>
+              {(error as BaseError).shortMessage || error.message}
+            </AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
+    </Card>
   )
 }
